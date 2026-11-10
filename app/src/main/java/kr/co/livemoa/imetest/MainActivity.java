@@ -11,6 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+    private TextView status;
+    @Override protected void onResume() { super.onResume(); updateStatus(); }
+    private void updateStatus() {
+        status.setText("[진단]\n서비스 연결: " + (ImeOverlayService.connected ? "예" : "아니오(서비스가 꺼져 있음)")
+            + "\n받은 이벤트 수: " + ImeOverlayService.eventCount
+            + "\n" + ImeOverlayService.lastInfo);
+    }
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         LinearLayout root = new LinearLayout(this);
@@ -29,6 +36,14 @@ public class MainActivity extends Activity {
         test.setText("주문 테스트 화면 확인");
         test.setOnClickListener(v -> startActivity(new Intent(this, OrderTestActivity.class)));
         root.addView(test);
+        status = new TextView(this);
+        status.setTextSize(14);
+        status.setPadding(0, 30, 0, 10);
+        root.addView(status);
+        Button refresh = new Button(this);
+        refresh.setText("상태 새로고침");
+        refresh.setOnClickListener(v -> updateStatus());
+        root.addView(refresh);
         setContentView(root);
     }
 }

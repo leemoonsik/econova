@@ -21,6 +21,9 @@ import java.util.List;
  * Places a small button at the IME window's top boundary.
  */
 public class ImeOverlayService extends AccessibilityService {
+    static volatile boolean connected = false;
+    static volatile int eventCount = 0;
+    static volatile String lastInfo = "아직 이벤트 없음";
     private WindowManager wm;
     private TextView button;
     private WindowManager.LayoutParams params;
@@ -31,10 +34,12 @@ public class ImeOverlayService extends AccessibilityService {
 
     @Override protected void onServiceConnected() {
         super.onServiceConnected();
+        connected = true;
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         scheduleUpdate();
     }
-    @Override public void onAccessibilityEvent(AccessibilityEvent event) { scheduleUpdate(); }
+    @Override public void onAccessibilityEvent(AccessibilityEvent event) { eventCount++; scheduleUpdate(); }
+    @Override public boolean onUnbind(Intent intent) { connected = false; return super.onUnbind(intent); }
     @Override public void onInterrupt() { hide(); }
     @Override public void onDestroy() { handler.removeCallbacks(refreshRunnable); hide(); super.onDestroy(); }
     private void scheduleUpdate() { handler.removeCallbacks(refreshRunnable); handler.postDelayed(refreshRunnable, 120); }
@@ -42,8 +47,13 @@ public class ImeOverlayService extends AccessibilityService {
     private void refreshOverlay() {
         List<AccessibilityWindowInfo> windows = getWindows();
         Rect imeBounds = null;
+        StringBuilder info = new StringBuilder();
+        info.append("창 개수: ").append(windows == null ? "null" : windows.size());
         if (windows != null) {
             for (AccessibilityWindowInfo w : windows) {
+                Rect r0 = new Rect();
+                w.getBoundsInScreen(r0);
+                info.append("\n - 종류 ").append(w.getType()).append(" ").append(r0.toShortString());
                 if (w.getType() == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
                     Rect rect = new Rect();
                     w.getBoundsInScreen(rect);
@@ -55,6 +65,8 @@ public class ImeOverlayService extends AccessibilityService {
                 }
             }
         }
+        info.append("\n키보드 창: ").append(imeBounds == null ? "못 찾음" : imeBounds.toShortString());
+        lastInfo = info.toString();
         if (imeBounds == null) { hide(); return; }
         show(imeBounds);
     }
@@ -100,6 +112,7 @@ public class ImeOverlayService extends AccessibilityService {
                 }
             }
         } catch (Exception e) {
+            lastInfo = lastInfo + "\n오버레이 오류: " + e;
             hide();
         }
     }
