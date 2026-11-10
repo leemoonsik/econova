@@ -15,7 +15,7 @@ public class OrderTestActivity extends Activity {
         root.setPadding(45, 70, 45, 45);
         root.setBackgroundColor(Color.WHITE);
         TextView title = new TextView(this);
-        title.setText("라이브모아 주문창 열기 성공");
+        title.setText("라이브모아 주문창 (데모)");
         title.setTextSize(24);
         title.setTextColor(Color.BLACK);
         root.addView(title);

@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
         root.setPadding(45, 65, 45, 45);
         root.setBackgroundColor(Color.WHITE);
         TextView info = new TextView(this);
-        info.setText("라이브모아: 기본 키보드 위 아이콘 테스트\n\n1. 아래 버튼으로 접근성 설정을 엽니다.\n2. '라이브모아 키보드 위 아이콘 테스트' 서비스를 켭니다.\n3. 틱톡 / 유튜브 등에서 댓글 입력창을 눌러 봅니다.\n4. 키보드 상단에 주문 아이콘이 나타나는지 확인합니다.\n5. 아이콘을 누르면 테스트 주문창이 열립니다.\n\n※ 실제 라이브모아 앱과 연결하지 않는 검증용 앱입니다.\n※ 화면 내용·댓글·개인정보를 읽거나 저장하지 않습니다.");
+        info.setText("라이브모아: 키보드 위 +Live 버튼 테스트\n\n1. 아래 버튼으로 접근성 설정을 엽니다.\n2. '라이브모아 키보드 위 아이콘 테스트' 서비스를 켭니다.\n3. 틱톡 / 유튜브 등에서 댓글 입력창을 눌러 봅니다.\n4. 키보드 상단에 +Live 버튼이 나타나는지 확인합니다.\n5. 버튼을 누르면 라이브모아 주문창(데모)이 열립니다.\n\n※ 실제 라이브모아 앱과 연결하지 않는 검증용 앱입니다.\n※ 화면 내용·댓글·개인정보를 읽거나 저장하지 않습니다.");
         info.setTextSize(17);
         root.addView(info);
         Button settings = new Button(this);
@@ -36,6 +36,11 @@ public class MainActivity extends Activity {
         test.setText("주문 테스트 화면 확인");
         test.setOnClickListener(v -> startActivity(new Intent(this, OrderTestActivity.class)));
         root.addView(test);
+        android.widget.CheckBox all = new android.widget.CheckBox(this);
+        all.setText("모든 앱에서 표시 (테스트용). 끄면 틱톡·유튜브 등 지정 앱에서만 표시");
+        all.setChecked(getSharedPreferences(ImeOverlayService.PREFS, MODE_PRIVATE).getBoolean(ImeOverlayService.KEY_ALL_APPS, false));
+        all.setOnCheckedChangeListener((b, c) -> getSharedPreferences(ImeOverlayService.PREFS, MODE_PRIVATE).edit().putBoolean(ImeOverlayService.KEY_ALL_APPS, c).apply());
+        root.addView(all);
         status = new TextView(this);
         status.setTextSize(14);
         status.setPadding(0, 30, 0, 10);
