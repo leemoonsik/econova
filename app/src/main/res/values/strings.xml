@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">라이브모아 키보드 위 아이콘 테스트</string>
+    <string name="accessibility_desc">키보드 창의 위치만 확인하여 키보드 바로 위에 주문 아이콘을 표시합니다. 화면 텍스트나 입력 내용은 수집하지 않습니다.</string>
+</resources>
