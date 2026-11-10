@@ -2,6 +2,8 @@ name: Build APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,3 +21,9 @@ jobs:
         with:
           name: livemoa-ime-overlay-test-apk
           path: app/build/outputs/apk/debug/*.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: 라이브모아 테스트 APK (최신)
+          files: app/build/outputs/apk/debug/app-debug.apk
+          make_latest: true
