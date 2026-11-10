@@ -21,6 +21,8 @@ public class OrderTestActivity extends Activity {
         root.addView(title);
         TextView details = new TextView(this);
         details.setText("테스트 성공: 키보드 위 아이콘을 눌러 앱 화면을 실행했습니다.\n\n실제 상품 / 주문 / 결제 기능은 연결하지 않았습니다.");
+        String seller = getIntent().getStringExtra("seller");
+        if (seller != null) details.setText("방송 주소(셀러 구분용):\n" + seller + "\n\n회원: 홍길동 (데모) / 010-0000-0000\n\n실제 상품·주문·결제는 연결하지 않은 시제품입니다.");
         details.setTextSize(17);
         details.setPadding(0,35,0,25);
         root.addView(details);

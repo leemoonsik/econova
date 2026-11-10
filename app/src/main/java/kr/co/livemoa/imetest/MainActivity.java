@@ -36,6 +36,10 @@ public class MainActivity extends Activity {
         test.setText("주문 테스트 화면 확인");
         test.setOnClickListener(v -> startActivity(new Intent(this, OrderTestActivity.class)));
         root.addView(test);
+        Button live = new Button(this);
+        live.setText("앱 안에서 라이브 보기 시험 (WebView)");
+        live.setOnClickListener(v -> startActivity(new Intent(this, LiveWebActivity.class)));
+        root.addView(live);
         android.widget.CheckBox all = new android.widget.CheckBox(this);
         all.setText("모든 앱에서 표시 (테스트용). 끄면 틱톡·유튜브 등 지정 앱에서만 표시");
         all.setChecked(getSharedPreferences(ImeOverlayService.PREFS, MODE_PRIVATE).getBoolean(ImeOverlayService.KEY_ALL_APPS, false));
